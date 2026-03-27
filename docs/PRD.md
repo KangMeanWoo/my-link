@@ -31,7 +31,7 @@
 | **통계(Analytics)** | 링크별 클릭 조회수 | 개별 링크별로 몇 번의 클릭이 발생했는지 트래킹 및 조회수 제공 |
 
 ## 4. 기술 스택 및 데이터베이스 모델링
-- **프론트엔드 UI**: `shadcn/ui`, React (Next.js 미사용)
+- **프론트엔드 UI**: Next.js (App Router), React, `shadcn/ui`
 - **인증 인프라(BaaS)**: `Firebase Auth` (Google OAuth 단일 지원)
 - **데이터베이스(DB)**: `Firebase Firestore`
   - **데이터 모델링 원칙**:
