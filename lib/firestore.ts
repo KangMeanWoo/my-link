@@ -24,10 +24,10 @@ const linksCollectionRef = collection(db, "users", "anonymous", "links");
 
 /**
  * Firestore에서 모든 링크를 가져옵니다.
- * createdAt 기준 오름차순 정렬 (가장 오래된 것이 먼저)
+ * createdAt 기준 내림차순 정렬 (최신순)
  */
 export async function getLinks(): Promise<FirestoreLinkItem[]> {
-  const q = query(linksCollectionRef, orderBy("createdAt", "asc"));
+  const q = query(linksCollectionRef, orderBy("createdAt", "desc"));
   const snapshot = await getDocs(q);
 
   return snapshot.docs.map((doc) => ({

@@ -19,7 +19,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 
 // Zod 스키마 정의: 링크 추가 폼 유효성 검사
 const addLinkSchema = z.object({
@@ -70,6 +70,9 @@ export default function Page() {
   // 다이얼로그 열림/닫힘 상태
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  // 링크 추가 중 로딩 상태
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   // React Hook Form + Zod resolver
   const {
     register,
@@ -86,13 +89,16 @@ export default function Page() {
 
   // 링크 추가 핸들러 (RHF의 handleSubmit이 유효성 검사 통과 시에만 호출)
   const onSubmit = async (data: AddLinkFormData) => {
+    setIsSubmitting(true);
     try {
       const newLink = await addLink(data.title.trim(), data.url.trim());
-      setLinks((prev) => [...prev, newLink]);
+      setLinks((prev) => [newLink, ...prev]);
       reset();
       setDialogOpen(false);
     } catch (error) {
       console.error("링크 추가 실패:", error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -136,6 +142,7 @@ export default function Page() {
                   <Input
                     id="link-title"
                     placeholder="예: 인스타그램"
+                    disabled={isSubmitting}
                     {...register("title")}
                   />
                   {errors.title && (
@@ -147,6 +154,7 @@ export default function Page() {
                   <Input
                     id="link-url"
                     placeholder="예: https://instagram.com/username"
+                    disabled={isSubmitting}
                     {...register("url")}
                   />
                   {errors.url && (
@@ -158,6 +166,7 @@ export default function Page() {
                 <Button
                   type="button"
                   variant="outline"
+                  disabled={isSubmitting}
                   onClick={() => {
                     reset();
                     setDialogOpen(false);
@@ -165,8 +174,15 @@ export default function Page() {
                 >
                   취소
                 </Button>
-                <Button type="submit" id="submit-link-button">
-                  추가하기
+                <Button type="submit" id="submit-link-button" disabled={isSubmitting}>
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      추가 중...
+                    </>
+                  ) : (
+                    "추가하기"
+                  )}
                 </Button>
               </DialogFooter>
             </form>
