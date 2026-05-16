@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // [사용자 프로필 및 링크 관리 규칙]
+    // 경로: /users/{userId}
+    match /users/{userId} {
+      
+      // 1. 읽기: 누구나 가능 (퍼블릭 페이지 조회를 위함)
+      // 2. 쓰기: 로그인된 사용자이며, 본인의 userId와 문서 ID가 일치할 때만 가능
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+
+      // [링크 서브컬렉션]
+      // 경로: /users/{userId}/links/{linkId}
+      match /links/{linkId} {
+        allow read: if true;
+        // 생성 및 삭제는 본인만 가능
+        allow create, delete: if request.auth != null && request.auth.uid == userId;
+        // 수정: 본인이거나, 또는 클릭 수(clicks) 필드만 변경하는 경우 누구나 허용
+        allow update: if (request.auth != null && request.auth.uid == userId)
+                      || (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['clicks']));
+      }
+
+      // [프로필 서브컬렉션/문서]
+      // 경로: /users/{userId}/profile/{docId}
+      match /profile/{docId} {
+        allow read: if true;
+        allow write: if request.auth != null && request.auth.uid == userId;
+      }
+    }
+  }
+}
