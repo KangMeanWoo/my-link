@@ -1,6 +1,6 @@
 import { initializeApp, getApps, getApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
-import { getFirestore } from "firebase/firestore";
+import { initializeFirestore, terminate } from "firebase/firestore";
 import { getAnalytics, isSupported } from "firebase/analytics";
 
 // Firebase 설정 - 환경변수에서 로드
@@ -21,7 +21,10 @@ const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // Firestore (사용자 데이터 및 링크 데이터 저장용)
-const db = getFirestore(app);
+// 서버사이드(Node.js/Edge) 환경에서 GRPC 에러 방지를 위해 롱 폴링 사용
+const db = initializeFirestore(app, {
+  experimentalForceLongPolling: true,
+});
 
 // Analytics (브라우저 환경에서만 초기화)
 const analytics =

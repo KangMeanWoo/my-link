@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
+import { cn } from "@/lib/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { User, onAuthStateChanged } from "firebase/auth";
@@ -34,7 +35,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Plus, Loader2, Pencil, Trash2, Check, X, LogIn, LogOut, Moon, Sun, ExternalLink, Copy, MousePointerClick, BarChart3 } from "lucide-react";
+import { Plus, Loader2, Pencil, Trash2, Check, X, LogIn, LogOut, Moon, Sun, ExternalLink, Copy, MousePointerClick, BarChart3, Rocket, Zap, Shield, ChevronRight, Share2, Globe } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 
 // Zod 스키마 정의: 링크 추가 폼 유효성 검사
@@ -415,19 +417,205 @@ export default function Page() {
         </div>
       </header>
 
-      <div className="w-full max-w-md flex flex-col gap-6 py-12 px-4">
+      <div className={cn("w-full flex flex-col gap-6 py-12 px-4 transition-all duration-500", user ? "max-w-md" : "max-w-6xl")}>
         {!user ? (
           /* 비로그인 화면 (방문자 또는 랜딩) */
-          <div className="text-center flex flex-col items-center gap-6 py-12">
-            <h1 className="text-3xl font-bold tracking-tight">나만의 링크 모음</h1>
-            <p className="text-muted-foreground">
-              로그인 후 나만의 링크 페이지를 만들고 관리해보세요.
-              <br />간편하게 모든 링크를 한 곳에 모을 수 있습니다.
-            </p>
-            <Button onClick={signInWithGoogle} size="lg" className="mt-4">
-              <LogIn className="w-5 h-5 mr-2" />
-              구글 계정으로 시작하기
-            </Button>
+          <div className="flex flex-col gap-24 py-8 overflow-hidden">
+            {/* Hero Section */}
+            <section className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
+              <div className="flex-1 text-center lg:text-left space-y-8">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-[1.1] mb-2">
+                    모든 링크를 <br />
+                    <span className="bg-gradient-to-r from-primary via-purple-500 to-pink-500 bg-clip-text text-transparent">
+                      단 하나로
+                    </span>
+                  </h1>
+                </motion.div>
+                <motion.p
+                  className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto lg:mx-0 leading-relaxed"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.1 }}
+                >
+                  개발자, 크리에이터를 위한 심플하고 강력한 링크 인 바이오 서비스. <br />
+                  단 1초 만에 나만의 랜딩 페이지를 만들고 전 세계와 공유하세요.
+                </motion.p>
+                <motion.div
+                  className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: 0.2 }}
+                >
+                  <Button onClick={signInWithGoogle} size="xl" className="w-full sm:w-auto h-14 px-8 text-lg font-bold rounded-2xl shadow-xl shadow-primary/20 hover:scale-105 transition-all group">
+                    <LogIn className="w-5 h-5 mr-2 transition-transform group-hover:translate-x-1" />
+                    지금 바로 시작하기
+                  </Button>
+                  <Button variant="outline" size="xl" className="w-full sm:w-auto h-14 px-8 text-lg font-semibold rounded-2xl" asChild>
+                    <a href="#features" className="flex items-center">
+                      <Zap className="w-5 h-5 mr-2 text-primary" />
+                      핵심 기능 보기
+                    </a>
+                  </Button>
+                </motion.div>
+              </div>
+
+              {/* Floating Mockup Visual */}
+              <motion.div 
+                className="flex-1 relative w-full max-w-[400px] lg:max-w-none py-10"
+                initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
+                animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                transition={{ duration: 0.8, delay: 0.3 }}
+              >
+                <div className="relative z-10 bg-card border shadow-2xl rounded-[3rem] p-4 aspect-[9/18.5] w-full max-w-[320px] mx-auto overflow-hidden ring-8 ring-muted/20">
+                  {/* Phone Header Mockup */}
+                  <div className="w-24 h-6 bg-muted rounded-full mx-auto mb-8 mt-2" />
+                  
+                  {/* Mock Profile */}
+                  <div className="space-y-6 flex flex-col items-center px-4">
+                    <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center p-1 border border-primary/20">
+                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-primary via-purple-500 to-pink-500" />
+                    </div>
+                    <div className="space-y-2 w-full text-center">
+                      <div className="h-4 w-24 bg-muted rounded-full mx-auto" />
+                      <div className="h-3 w-40 bg-muted/50 rounded-full mx-auto" />
+                    </div>
+                    
+                    {/* Mock Links */}
+                    <div className="w-full space-y-3 mt-4">
+                      {[1, 2, 3, 4].map((i) => (
+                        <div key={i} className="h-12 w-full bg-muted/30 rounded-xl border border-border/50 flex items-center px-3 gap-3">
+                          <div className="w-6 h-6 rounded bg-muted/60" />
+                          <div className="h-2.5 w-24 bg-muted/60 rounded" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Decorative Blur Elements */}
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-primary/10 rounded-full blur-[100px] -z-10" />
+                <motion.div 
+                  className="absolute -top-4 -right-4 p-4 bg-background/80 backdrop-blur border rounded-2xl shadow-xl z-20"
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 4, repeat: Infinity }}
+                >
+                  <Zap className="w-8 h-8 text-yellow-500 fill-yellow-500" />
+                </motion.div>
+                <motion.div 
+                  className="absolute -bottom-2 -left-8 p-4 bg-background/80 backdrop-blur border rounded-2xl shadow-xl z-20"
+                  animate={{ y: [0, 10, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, delay: 1 }}
+                >
+                  <Share2 className="w-8 h-8 text-primary" />
+                </motion.div>
+                <motion.div 
+                  className="absolute top-1/3 -left-12 p-3 bg-background/80 backdrop-blur border rounded-full shadow-lg z-20"
+                  animate={{ scale: [1, 1.1, 1] }}
+                  transition={{ duration: 5, repeat: Infinity }}
+                >
+                  <Globe className="w-6 h-6 text-purple-500" />
+                </motion.div>
+              </motion.div>
+            </section>
+
+            {/* Features Section */}
+            <section id="features" className="grid md:grid-cols-3 gap-8 relative">
+              <div className="absolute inset-0 bg-primary/5 rounded-[4rem] -mx-4 -my-8 -z-10 blur-3xl opacity-50" />
+              {[
+                { 
+                  icon: Rocket, 
+                  title: "1초 소셜 로그인", 
+                  desc: "별도의 회원가입 없이 구글 계정으로 즉시 시작하세요. 번거로운 과정이 전혀 없습니다.",
+                  color: "text-blue-500",
+                  bg: "bg-blue-500/10"
+                },
+                { 
+                  icon: Pencil, 
+                  title: "직관적인 인라인 편집", 
+                  desc: "모든 정보는 보이는 곳에서 즉시 수정할 수 있습니다. 결과물을 실시간으로 확인하세요.",
+                  color: "text-green-500",
+                  bg: "bg-green-500/10"
+                },
+                { 
+                  icon: BarChart3, 
+                  title: "실시간 클릭 통계", 
+                  desc: "내 링크가 얼마나 클릭되었는지 대시보드에서 실시간으로 트래킹하고 분석하세요.",
+                  color: "text-purple-500",
+                  bg: "bg-purple-500/10"
+                },
+              ].map((f, i) => (
+                <motion.div
+                  key={i}
+                  className="group p-8 rounded-[2.5rem] bg-card/50 backdrop-blur-sm border border-border/50 hover:border-primary/50 transition-all hover:shadow-2xl hover:-translate-y-2"
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.1 }}
+                >
+                  <div className={cn("w-16 h-16 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-inner", f.bg, f.color)}>
+                    <f.icon className="w-8 h-8" />
+                  </div>
+                  <h3 className="text-2xl font-bold mb-3 tracking-tight">{f.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed text-base">{f.desc}</p>
+                </motion.div>
+              ))}
+            </section>
+
+            {/* Steps Section */}
+            <section className="bg-primary/5 dark:bg-primary/10 rounded-[4rem] p-12 lg:p-24 text-center space-y-16 border border-primary/10">
+              <div className="space-y-4">
+                <motion.h2 
+                  className="text-4xl md:text-5xl font-bold tracking-tight"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                >
+                  단 3단계로 끝내는 나만의 페이지
+                </motion.h2>
+                <p className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed">
+                  복잡한 설정은 잊으세요. 마이링크는 사용자의 편의성을 최우선으로 생각합니다.
+                </p>
+              </div>
+              <div className="grid md:grid-cols-3 gap-16 relative">
+                {[
+                  { step: "01", title: "로그인", desc: "구글 계정으로 단 1초 만에 접속" },
+                  { step: "02", title: "정보 입력", desc: "프로필과 링크를 즉시 추가" },
+                  { step: "03", title: "링크 공유", desc: "생성된 고유 URL을 전 세계에 배포" },
+                ].map((s, i) => (
+                  <div key={i} className="relative z-10 flex flex-col items-center group">
+                    <div className="text-8xl font-black text-primary/5 absolute -top-12 group-hover:text-primary/10 transition-colors pointer-events-none">
+                      {s.step}
+                    </div>
+                    <div className="w-12 h-12 rounded-full bg-primary text-primary-foreground flex items-center justify-center font-bold text-xl mb-6 shadow-lg shadow-primary/30 relative z-10">
+                      {i + 1}
+                    </div>
+                    <h4 className="text-2xl font-bold mb-3 tracking-tight">{s.title}</h4>
+                    <p className="text-muted-foreground text-lg">{s.desc}</p>
+                    {i < 2 && (
+                      <div className="hidden lg:block absolute top-12 -right-8 text-muted-foreground/30">
+                        <ChevronRight className="w-8 h-8" />
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+              
+              <motion.div 
+                className="pt-8"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+              >
+                <Button onClick={signInWithGoogle} size="xl" className="rounded-2xl px-12 font-bold shadow-xl shadow-primary/20">
+                  지금 바로 시작하기
+                </Button>
+              </motion.div>
+            </section>
           </div>
         ) : (
           /* 로그인 사용자 대시보드 */
@@ -725,8 +913,16 @@ export default function Page() {
           </>
         )}
 
-        <footer className="mt-8 text-center text-xs text-muted-foreground">
-          Powered by MyLink
+        <footer className={cn("mt-20 pt-12 border-t w-full flex flex-col md:flex-row items-center justify-between gap-6 text-muted-foreground", !user && "max-w-6xl")}>
+          <div className="flex items-center gap-2">
+            <div className="font-bold text-lg tracking-tighter text-foreground">MyLink</div>
+            <span className="text-sm">© 2026. All rights reserved.</span>
+          </div>
+          <div className="flex items-center gap-6 text-sm">
+            <Link href="/privacy" className="hover:text-primary transition-colors text-xs sm:text-sm">개인정보처리방침</Link>
+            <Link href="/terms" className="hover:text-primary transition-colors text-xs sm:text-sm">이용약관</Link>
+            <Link href="https://github.com" target="_blank" className="hover:text-primary transition-colors text-xs sm:text-sm">GitHub</Link>
+          </div>
         </footer>
       </div>
     </div>
