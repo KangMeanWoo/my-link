@@ -14,7 +14,7 @@ const fontMono = Geist_Mono({
 })
 
 export const metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'),
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL || 'https://my-link-ditto.vercel.app'),
   title: {
     default: "MyLink - 모든 링크를 한 곳에",
     template: "%s | MyLink"
@@ -32,7 +32,7 @@ export const metadata = {
   openGraph: {
     title: "MyLink - 모든 링크를 한 곳에",
     description: "나만의 링크를 한 곳에 모으고 통계를 확인하세요.",
-    url: "https://mylink.app",
+    url: "https://my-link-ditto.vercel.app",
     siteName: "MyLink",
     locale: "ko_KR",
     type: "website",
